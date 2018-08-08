@@ -1,11 +1,11 @@
 <?php
 /**
- * File: autoload.php
+ * File: bootstrap.php
  * Author: Yusuf Shakeel
  * github: https://github.com/yusufshakeel/dyimagefu
  * Date: 12-Feb-2014 Wed
- * Description: This file contains the autoload.
- * 
+ * Description: This is the bootstrap file.
+ *
  * MIT License
  *
  * Copyright (c) 2018 Yusuf Shakeel
@@ -29,35 +29,6 @@
  * SOFTWARE.
  */
 
-if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-	throw new Exception('DYImageFu requires PHP version 5.5 or higher.');
-}
+date_default_timezone_set('Asia/Kolkata');
 
-if (!extension_loaded('gd')) {
-	throw new Exception('DYImageFu requires GD extension.');
-}
-
-spl_autoload_register(function ($class) {
-	
-	$namespace = 'DYImageFu\\';
-	
-	$baseDir = __DIR__;
-	
-	// if class is not using namespace then return
-	$len = strlen($namespace);
-	if (strncmp($namespace, $class, $len) !== 0) {
-		return;
-	}
-	
-	// get the relative class
-	$relativeClass = substr($class, $len);
-	
-	// find file
-	$file = $baseDir . '/' . str_replace('\\', '/', $relativeClass) . '.php';
-	
-	// require the file if exists
-	if (file_exists($file)) {
-		require $file;
-	}
-	
-});
+require_once __DIR__ . '/../vendor/autoload.php';

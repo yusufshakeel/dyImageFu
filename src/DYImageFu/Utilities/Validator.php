@@ -1,11 +1,11 @@
 <?php
 /**
- * File: autoload.php
+ * File: Validator.php
  * Author: Yusuf Shakeel
  * github: https://github.com/yusufshakeel/dyimagefu
  * Date: 12-Feb-2014 Wed
- * Description: This file contains the autoload.
- * 
+ * Description: This file contains the Validator class.
+ *
  * MIT License
  *
  * Copyright (c) 2018 Yusuf Shakeel
@@ -29,35 +29,32 @@
  * SOFTWARE.
  */
 
-if (version_compare(PHP_VERSION, '5.5.0', '<')) {
-	throw new Exception('DYImageFu requires PHP version 5.5 or higher.');
-}
+namespace DYImageFu\Utilities;
 
-if (!extension_loaded('gd')) {
-	throw new Exception('DYImageFu requires GD extension.');
-}
+class Validator
+{
+    /**
+     * This method will return the quality value.
+     *
+     * @param $quality
+     * @return array
+     * @throws \Exception
+     */
+    public static function validateImageQuality($quality)
+    {
+        // check data type of the $quality
+        if (!in_array(gettype($quality), array("integer", "double"))) {
+            throw new \Exception('Quality must be a number.');
+        }
 
-spl_autoload_register(function ($class) {
-	
-	$namespace = 'DYImageFu\\';
-	
-	$baseDir = __DIR__;
-	
-	// if class is not using namespace then return
-	$len = strlen($namespace);
-	if (strncmp($namespace, $class, $len) !== 0) {
-		return;
-	}
-	
-	// get the relative class
-	$relativeClass = substr($class, $len);
-	
-	// find file
-	$file = $baseDir . '/' . str_replace('\\', '/', $relativeClass) . '.php';
-	
-	// require the file if exists
-	if (file_exists($file)) {
-		require $file;
-	}
-	
-});
+        // check quality range
+        if ($quality > 100 || $quality <= 0) {
+            throw new \Exception('Quality must be greater than 0 and less than or equal to 100.');
+        }
+
+        return array(
+            "type" => gettype($quality),
+            "value" => $quality
+        );
+    }
+}
