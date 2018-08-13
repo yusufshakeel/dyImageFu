@@ -33,13 +33,145 @@ namespace DYImageFu\Core;
 
 class Resize
 {
-    private $option = [
+    private $_option = [
         'src' => '',
         'destDir' => '',
         'config' => [
-            'resize' => '',
+            'resize' => 'width',
             'dimension' => [],
             'quality' => 100
         ]
     ];
+
+    public function __construct(array $option)
+    {
+        $this->_init($option);
+    }
+
+    /**
+     * This will set the options.
+     *
+     * @param array $option
+     * @throws \Exception
+     */
+    private function _init(array $option)
+    {
+        // check and set source image file
+        if (!isset($option['src'])) {
+
+            throw new \Exception('src is required.');
+
+        } else if (!file_exists($option['src'])) {
+
+            throw new \Exception('src file does not exists.');
+
+        } else {
+
+            $this->_option['src'] = $option['src'];
+
+        }
+
+        // check and set destination directory
+        if (!isset($option['destDir'])) {
+
+            throw new \Exception('destDir is required.');
+
+        } else if (!is_dir($option['destDir'])) {
+
+            throw new \Exception('destDir is not a directory.');
+
+        } else {
+
+            $this->_option['destDir'] = $option['destDir'];
+
+        }
+
+        // check config
+        if (!isset($option['config'])) {
+
+            throw new \Exception('config is required.');
+
+        } else {
+
+            $this->_option['config'] = [];
+
+        }
+
+        // check and set resize
+        if (!isset($option['config']['resize'])) {
+
+            throw new \Exception('config resize is required.');
+
+        } else if (!in_array($option['config']['resize'], ['width', 'height'])) {
+
+            throw new \Exception('config resize must either be set to "width" or "height".');
+
+        } else {
+
+            $this->_option['config']['resize'] = $option['config']['resize'];
+
+        }
+
+        // check and set dimension
+        if (!isset($option['config']['dimension'])) {
+
+            throw new \Exception('config dimension is required.');
+
+        }
+        if (in_array(gettype($option['config']['dimension']), ['integer', 'double'])) {
+
+            $this->_option['config']['dimension'] = $option['config']['dimension'];
+
+        } else if (gettype($option['config']['dimension']) === "array") {
+
+            $this->_option['config']['dimension'] = [];
+
+            foreach ($option['config']['dimension'] as $value) {
+
+                if (in_array(gettype($value), ['integer'])) {
+
+                    array_push($this->_option['config']['dimension'], $value);
+
+                } else {
+
+                    throw new \Exception('One of the value in dimension array is of invalid type. Use integer or decimal value.');
+
+                }
+
+            }
+        } else {
+            throw new \Exception('config dimension must be an integer or decimal value.');
+        }
+
+        // check and set quality
+        if (!isset($option['config']['quality'])) {
+
+            throw new \Exception('config quality is required.');
+
+        }
+        if (in_array(gettype($option['config']['quality']), ['integer', 'double'])) {
+
+            $this->_option['config']['quality'] = $option['config']['quality'];
+
+        } else if (gettype($option['config']['quality']) === "array") {
+
+            $this->_option['config']['quality'] = [];
+
+            foreach ($option['config']['quality'] as $value) {
+
+                if (in_array(gettype($value), ['integer'])) {
+
+                    array_push($this->_option['config']['quality'], $value);
+
+                } else {
+
+                    throw new \Exception('One of the value in quality array is of invalid type. Use integer or decimal value.');
+
+                }
+
+            }
+        } else {
+            throw new \Exception('config quality must be an integer or decimal value.');
+        }
+    }
 }
