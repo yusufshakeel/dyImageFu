@@ -48,6 +48,11 @@ class Resize
         $this->_init($option);
     }
 
+    public function setOption(array $option)
+    {
+        $this->_init($option);
+    }
+
     /**
      * This will set the options.
      *
@@ -140,7 +145,7 @@ class Resize
 
             }
         } else {
-            throw new \Exception('config dimension must be an integer or decimal value.');
+            throw new \Exception('config dimension must be an integer or decimal value or an array of integer or decimal values.');
         }
 
         // check and set quality
@@ -171,7 +176,7 @@ class Resize
 
             }
         } else {
-            throw new \Exception('config quality must be an integer or decimal value.');
+            throw new \Exception('config quality must be an integer or decimal value or an array of integer or decimal values.');
         }
     }
 }

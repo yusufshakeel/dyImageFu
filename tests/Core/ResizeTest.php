@@ -38,15 +38,193 @@ class ResizeTest extends TestCase
 {
     public function testOption()
     {
+        // src is required
+        $option = [];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('src is required.', $e->getMessage());
+        }
+
+        // a valid src is required
         $option = [
-            'src' => __DIR__ . '/../../example/image/rubix-cube.jpg',
+            'src' => __DIR__ . '/../../example/image/invalid-image.jpg'
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('src file does not exists.', $e->getMessage());
+        }
+
+        // destDir is required
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('destDir is required.', $e->getMessage());
+        }
+
+        // valid destDir is required
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/invalid-dir/',
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('destDir is not a directory.', $e->getMessage());
+        }
+
+        // config is required
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config is required.', $e->getMessage());
+        }
+
+        // config resize is required
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => []
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config resize is required.', $e->getMessage());
+        }
+
+        // config resize must be either width or height
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
-                'resize' => 'width',
+                'resize' => 'unknown',
                 'dimension' => 300,
                 'quality' => 100
             ]
         ];
-        $obj = new Resize($option);
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config resize must either be set to "width" or "height".', $e->getMessage());
+        }
+
+        // config dimension is required
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width'
+            ]
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config dimension is required.', $e->getMessage());
+        }
+
+        // config dimension must be integer/decimal value or
+        // array of integer/decimal values
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => 'unknown'
+            ]
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config dimension must be an integer or decimal value or an array of integer or decimal values.', $e->getMessage());
+        }
+
+        // if config dimension is an array
+        // then it must have integer/decimal values.
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => [10, 20.5, 'unknown']
+            ]
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('One of the value in dimension array is of invalid type. Use integer or decimal value.', $e->getMessage());
+        }
+
+        // config quality is required
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => [1200, 920, 720]
+            ]
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config quality is required.', $e->getMessage());
+        }
+
+        // if config quality has unknow value
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => [10, 20, 30],
+                'quality' => 'unknown'
+            ]
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config quality must be an integer or decimal value or an array of integer or decimal values.', $e->getMessage());
+        }
+
+        // config quality must be integer/decimal value or
+        // array of integer/decimal values
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => [10, 20, 30],
+                'quality' => 'unknown'
+            ]
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('config quality must be an integer or decimal value or an array of integer or decimal values.', $e->getMessage());
+        }
+
+        // if config quality is an array
+        // then it must have integer/decimal values.
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => [10, 20, 30],
+                'quality' => [10, 20.5, 'unknown']
+            ]
+        ];
+        try {
+            $obj = new Resize($option);
+        } catch (\Exception $e) {
+            $this->assertEquals('One of the value in quality array is of invalid type. Use integer or decimal value.', $e->getMessage());
+        }
     }
 }
