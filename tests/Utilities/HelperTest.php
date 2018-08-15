@@ -53,4 +53,19 @@ class HelperTest extends TestCase
         $computed = Helper::getPercentageValue(500, 50);
         $this->assertEquals(250, $computed);
     }
+
+    public function testGetImageDetail()
+    {
+        $image = __DIR__ . '/../../example/image/sample.jpg';
+        $result = Helper::getImageDetail($image);
+        $expected = [
+            'width' => 6000,
+            'height' => 4000,
+            'mime' => 'image/jpeg',
+            'size' => 1424240,
+            'imageMode' => 'landscape_image',
+            'aspectRatio' => 1.5
+        ];
+        $this->assertEquals($expected, $result);
+    }
 }
