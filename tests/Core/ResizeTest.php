@@ -36,7 +36,7 @@ use DYImageFu\Core\Resize;
 
 class ResizeTest extends TestCase
 {
-    public function testOption()
+    public function testConstructor()
     {
         // src is required
         $option = [];
@@ -226,5 +226,156 @@ class ResizeTest extends TestCase
         } catch (\Exception $e) {
             $this->assertEquals('One of the value in quality array is of invalid type. Use integer or decimal value.', $e->getMessage());
         }
+
+    }
+
+    public function testGetOption()
+    {
+        /* ============ LANDSCAPE IMAGE ============ */
+
+        // check option if resizing width
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => 1200,
+                'quality' => 100
+            ]
+        ];
+
+        $obj = new Resize($option);
+        $result = $obj->getOption();
+
+        $expected = [
+            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'srcDetail' => [
+                'width' => 6000,
+                'height' => 4000,
+                'mime' => 'image/jpeg',
+                'size' => 1424240,
+                'imageMode' => 'landscape_image',
+                'aspectRatio' => 1.5
+            ],
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => [1200],
+                'dimensionOtherSide' => [800],
+                'quality' => [100]
+            ]
+        ];
+
+        $this->assertEquals($expected, $result);
+
+
+        // check option if resizing height
+        $option = [
+            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'height',
+                'dimension' => 2000,
+                'quality' => 100
+            ]
+        ];
+
+        $obj = new Resize($option);
+        $result = $obj->getOption();
+
+        $expected = [
+            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'srcDetail' => [
+                'width' => 6000,
+                'height' => 4000,
+                'mime' => 'image/jpeg',
+                'size' => 1424240,
+                'imageMode' => 'landscape_image',
+                'aspectRatio' => 1.5
+            ],
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'height',
+                'dimension' => [2000],
+                'dimensionOtherSide' => [3000],
+                'quality' => [100]
+            ]
+        ];
+
+        $this->assertEquals($expected, $result);
+
+
+        /* ============ PORTRAIT IMAGE ============ */
+
+        // check option if resizing width
+        $option = [
+            'src' => __DIR__ . '/../../example/image/portrait.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => 1200,
+                'quality' => 100
+            ]
+        ];
+
+        $obj = new Resize($option);
+        $result = $obj->getOption();
+
+        $expected = [
+            'src' => __DIR__ . '/../../example/image/portrait.jpeg',
+            'srcDetail' => [
+                'width' => 1280,
+                'height' => 1920,
+                'mime' => 'image/jpeg',
+                'size' => 219381,
+                'imageMode' => 'portrait_image',
+                'aspectRatio' => 0.6666666666666666
+            ],
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'width',
+                'dimension' => [1200],
+                'dimensionOtherSide' => [1800],
+                'quality' => [100]
+            ]
+        ];
+
+        $this->assertEquals($expected, $result);
+
+
+        // check option if resizing height
+        $option = [
+            'src' => __DIR__ . '/../../example/image/portrait.jpeg',
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'height',
+                'dimension' => 900,
+                'quality' => 100
+            ]
+        ];
+
+        $obj = new Resize($option);
+        $result = $obj->getOption();
+
+        $expected = [
+            'src' => __DIR__ . '/../../example/image/portrait.jpeg',
+            'srcDetail' => [
+                'width' => 1280,
+                'height' => 1920,
+                'mime' => 'image/jpeg',
+                'size' => 219381,
+                'imageMode' => 'portrait_image',
+                'aspectRatio' => 0.6666666666666666
+            ],
+            'destDir' => __DIR__ . '/../../example/output/',
+            'config' => [
+                'resize' => 'height',
+                'dimension' => [900],
+                'dimensionOtherSide' => [600],
+                'quality' => [100]
+            ]
+        ];
+
+        $this->assertEquals($expected, $result);
     }
 }
