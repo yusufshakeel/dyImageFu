@@ -58,7 +58,7 @@ class ResizeTest extends TestCase
 
         // destDir is required
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
         ];
         try {
             $obj = new Resize($option);
@@ -68,7 +68,7 @@ class ResizeTest extends TestCase
 
         // valid destDir is required
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/invalid-dir/',
         ];
         try {
@@ -79,7 +79,7 @@ class ResizeTest extends TestCase
 
         // config is required
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
         ];
         try {
@@ -90,7 +90,7 @@ class ResizeTest extends TestCase
 
         // config resize is required
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => []
         ];
@@ -102,7 +102,7 @@ class ResizeTest extends TestCase
 
         // config resize must be either width or height
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'unknown',
@@ -118,7 +118,7 @@ class ResizeTest extends TestCase
 
         // config dimension is required
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width'
@@ -133,7 +133,7 @@ class ResizeTest extends TestCase
         // config dimension must be integer/decimal value or
         // array of integer/decimal values
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width',
@@ -149,7 +149,7 @@ class ResizeTest extends TestCase
         // if config dimension is an array
         // then it must have integer/decimal values.
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width',
@@ -164,7 +164,7 @@ class ResizeTest extends TestCase
 
         // config quality is required
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width',
@@ -179,7 +179,7 @@ class ResizeTest extends TestCase
 
         // if config quality has unknow value
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width',
@@ -196,7 +196,7 @@ class ResizeTest extends TestCase
         // config quality must be integer/decimal value or
         // array of integer/decimal values
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width',
@@ -213,7 +213,7 @@ class ResizeTest extends TestCase
         // if config quality is an array
         // then it must have integer/decimal values.
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpeg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width',
@@ -235,7 +235,7 @@ class ResizeTest extends TestCase
 
         // check option if resizing width
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'width',
@@ -248,12 +248,12 @@ class ResizeTest extends TestCase
         $result = $obj->getOption();
 
         $expected = [
-            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'srcDetail' => [
-                'width' => 6000,
-                'height' => 4000,
+                'width' => 1920,
+                'height' => 1280,
                 'mime' => 'image/jpeg',
-                'size' => 1424240,
+                'size' => 356965,
                 'imageMode' => 'landscape_image',
                 'aspectRatio' => 1.5
             ],
@@ -271,11 +271,11 @@ class ResizeTest extends TestCase
 
         // check option if resizing height
         $option = [
-            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'height',
-                'dimension' => 2000,
+                'dimension' => 1000,
                 'quality' => 100
             ]
         ];
@@ -284,20 +284,20 @@ class ResizeTest extends TestCase
         $result = $obj->getOption();
 
         $expected = [
-            'src' => __DIR__ . '/../../example/image/sample.jpg',
+            'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'srcDetail' => [
-                'width' => 6000,
-                'height' => 4000,
+                'width' => 1920,
+                'height' => 1280,
                 'mime' => 'image/jpeg',
-                'size' => 1424240,
+                'size' => 356965,
                 'imageMode' => 'landscape_image',
                 'aspectRatio' => 1.5
             ],
             'destDir' => __DIR__ . '/../../example/output/',
             'config' => [
                 'resize' => 'height',
-                'dimension' => [2000],
-                'dimensionOtherSide' => [3000],
+                'dimension' => [1000],
+                'dimensionOtherSide' => [1500],
                 'quality' => [100]
             ]
         ];

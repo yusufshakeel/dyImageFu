@@ -56,13 +56,13 @@ class HelperTest extends TestCase
 
     public function testGetImageDetail()
     {
-        $image = __DIR__ . '/../../example/image/sample.jpg';
+        $image = __DIR__ . '/../../example/image/landscape.jpeg';
         $result = Helper::getImageDetail($image);
         $expected = [
-            'width' => 6000,
-            'height' => 4000,
+            'width' => 1920,
+            'height' => 1280,
             'mime' => 'image/jpeg',
-            'size' => 1424240,
+            'size' => 356965,
             'imageMode' => 'landscape_image',
             'aspectRatio' => 1.5
         ];
