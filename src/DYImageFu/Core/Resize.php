@@ -31,30 +31,61 @@
 
 namespace DYImageFu\Core;
 
+use DYImageFu\Utilities\Helper;
+
 class Resize
 {
+    /**
+     * This options array for resize operation.
+     *
+     * @var array
+     */
     private $_option = [
         'src' => '',
+        'srcDetail' => [],  // this will be computed using 'src'
         'destDir' => '',
         'config' => [
-            'resize' => 'width',
+            'resize' => 'width',    // either width or height
             'dimension' => [],
-            'quality' => 100
+            'dimensionOtherSide' => [], // this will be computed using 'srcDetail', 'resize' and 'dimension'
+            'quality' => []
         ]
     ];
 
+    /**
+     * Resize constructor.
+     *
+     * @param array $option
+     * @throws \Exception
+     */
     public function __construct(array $option)
     {
         $this->_init($option);
     }
 
+    /**
+     * This function will set option for resize operation.
+     *
+     * @param array $option
+     * @throws \Exception
+     */
     public function setOption(array $option)
     {
         $this->_init($option);
     }
 
     /**
-     * This will set the options.
+     * This will return the option.
+     *
+     * @return array
+     */
+    public function getOption()
+    {
+        return $this->_option;
+    }
+
+    /**
+     * This will initialise the options for resize operation.
      *
      * @param array $option
      * @throws \Exception
@@ -73,6 +104,9 @@ class Resize
         } else {
 
             $this->_option['src'] = $option['src'];
+
+            // set source image detail
+            $this->_option['srcDetail'] = Helper::getImageDetail($this->_option['src']);
 
         }
 
@@ -125,7 +159,7 @@ class Resize
         }
         if (in_array(gettype($option['config']['dimension']), ['integer', 'double'])) {
 
-            $this->_option['config']['dimension'] = $option['config']['dimension'];
+            $this->_option['config']['dimension'] = [$option['config']['dimension']];
 
         } else if (gettype($option['config']['dimension']) === "array") {
 
@@ -144,9 +178,11 @@ class Resize
                 }
 
             }
+
         } else {
             throw new \Exception('config dimension must be an integer or decimal value or an array of integer or decimal values.');
         }
+        $this->_computeDimensionOtherSide();
 
         // check and set quality
         if (!isset($option['config']['quality'])) {
@@ -156,7 +192,7 @@ class Resize
         }
         if (in_array(gettype($option['config']['quality']), ['integer', 'double'])) {
 
-            $this->_option['config']['quality'] = $option['config']['quality'];
+            $this->_option['config']['quality'] = [$option['config']['quality']];
 
         } else if (gettype($option['config']['quality']) === "array") {
 
@@ -178,5 +214,36 @@ class Resize
         } else {
             throw new \Exception('config quality must be an integer or decimal value or an array of integer or decimal values.');
         }
+    }
+
+    /**
+     * This will compute the other side dimension.
+     */
+    private function _computeDimensionOtherSide()
+    {
+        $dimensionOtherSide = [];
+        $imgMode = $this->_option['srcDetail']['imageMode'];
+        $resize = $this->_option['config']['resize'];
+        $dimension = $this->_option['config']['dimension'];
+        $aspectRatio = $this->_option['srcDetail']['aspectRatio'];
+
+        switch ($imgMode) {
+            case Helper::IMAGE_MODE_LANDSCAPE:
+            case Helper::IMAGE_MODE_PORTRAIT:
+                if ($resize === 'width') {
+                    foreach ($dimension as $width) {
+                        $height = round($width / $aspectRatio);
+                        array_push($dimensionOtherSide, $height);
+                    }
+                } else if ($resize === 'height') {
+                    foreach ($dimension as $height) {
+                        $width = round($height * $aspectRatio);
+                        array_push($dimensionOtherSide, $width);
+                    }
+                }
+                break;
+        }
+
+        $this->_option['config']['dimensionOtherSide'] = $dimensionOtherSide;
     }
 }
