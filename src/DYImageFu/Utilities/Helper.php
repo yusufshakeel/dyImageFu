@@ -34,6 +34,12 @@ namespace DYImageFu\Utilities;
 class Helper
 {
     /**
+     * Constants
+     */
+    const IMAGE_MODE_LANDSCAPE = 'landscape_image';
+    const IMAGE_MODE_PORTRAIT = 'portrait_image';
+
+    /**
      * This function will return the proportional height based on the required width and
      * dimensions of the source image.
      *
@@ -84,4 +90,33 @@ class Helper
     {
         return intval($x * ($percent / 100));
     }
+
+    /**
+     * This will return the image detail.
+     *
+     * @param string $image This is the image file path. Example: /var/www/html/image/sample.png
+     * @return array
+     */
+    public static function getImageDetail($image)
+    {
+        $detail = getimagesize($image);
+
+        // mode: landscape/portrait image
+        $imgMode = ($detail[0] >= $detail[1]) ? self::IMAGE_MODE_LANDSCAPE : self::IMAGE_MODE_PORTRAIT;
+
+        // aspect ratio
+        $aspectRatio = $detail[0] / $detail[1];
+
+        $imgDetail = [
+            'width' => $detail[0],
+            'height' => $detail[1],
+            'mime' => $detail['mime'],
+            'size' => filesize($image),
+            'imageMode' => $imgMode,
+            'aspectRatio' => $aspectRatio
+        ];
+
+        return $imgDetail;
+    }
+
 }
