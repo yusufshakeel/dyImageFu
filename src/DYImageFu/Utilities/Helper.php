@@ -101,6 +101,11 @@ class Helper
     {
         $detail = getimagesize($image);
 
+        $pathinfo = pathinfo($image);
+        $filename = $pathinfo['filename'];
+        $dirname = $pathinfo['dirname'];
+        $extension = $pathinfo['extension'];
+
         // mode: landscape/portrait image
         $imgMode = ($detail[0] >= $detail[1]) ? self::IMAGE_MODE_LANDSCAPE : self::IMAGE_MODE_PORTRAIT;
 
@@ -108,6 +113,9 @@ class Helper
         $aspectRatio = $detail[0] / $detail[1];
 
         $imgDetail = [
+            'filename' => $filename,
+            'extension' => $extension,
+            'dirname' => $dirname,
             'width' => $detail[0],
             'height' => $detail[1],
             'mime' => $detail['mime'],
