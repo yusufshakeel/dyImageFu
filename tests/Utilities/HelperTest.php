@@ -59,6 +59,9 @@ class HelperTest extends TestCase
         $image = __DIR__ . '/../../example/image/landscape.jpeg';
         $result = Helper::getImageDetail($image);
         $expected = [
+            'filename' => 'landscape',
+            'extension' => 'jpeg',
+            'dirname' => __DIR__ . '/../../example/image',
             'width' => 1920,
             'height' => 1280,
             'mime' => 'image/jpeg',
