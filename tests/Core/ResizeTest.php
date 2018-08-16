@@ -250,6 +250,9 @@ class ResizeTest extends TestCase
         $expected = [
             'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'srcDetail' => [
+                'filename' => 'landscape',
+                'extension' => 'jpeg',
+                'dirname' => __DIR__ . '/../../example/image',
                 'width' => 1920,
                 'height' => 1280,
                 'mime' => 'image/jpeg',
@@ -286,6 +289,9 @@ class ResizeTest extends TestCase
         $expected = [
             'src' => __DIR__ . '/../../example/image/landscape.jpeg',
             'srcDetail' => [
+                'filename' => 'landscape',
+                'extension' => 'jpeg',
+                'dirname' => __DIR__ . '/../../example/image',
                 'width' => 1920,
                 'height' => 1280,
                 'mime' => 'image/jpeg',
@@ -324,6 +330,9 @@ class ResizeTest extends TestCase
         $expected = [
             'src' => __DIR__ . '/../../example/image/portrait.jpeg',
             'srcDetail' => [
+                'filename' => 'portrait',
+                'extension' => 'jpeg',
+                'dirname' => __DIR__ . '/../../example/image',
                 'width' => 1280,
                 'height' => 1920,
                 'mime' => 'image/jpeg',
@@ -360,6 +369,9 @@ class ResizeTest extends TestCase
         $expected = [
             'src' => __DIR__ . '/../../example/image/portrait.jpeg',
             'srcDetail' => [
+                'filename' => 'portrait',
+                'extension' => 'jpeg',
+                'dirname' => __DIR__ . '/../../example/image',
                 'width' => 1280,
                 'height' => 1920,
                 'mime' => 'image/jpeg',
