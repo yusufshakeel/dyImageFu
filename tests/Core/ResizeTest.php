@@ -408,6 +408,22 @@ class ResizeTest extends TestCase
         $obj = new Resize($option);
         $obj->resize();
 
+        $opt = $obj->getOption();
+        $widths = $opt['config']['dimension'];
+        $heights = $opt['config']['dimensionOtherSide'];
+        for ($i = 0; $i < count($widths); $i++) {
+
+            // assert that the resized file exists
+            $file = __DIR__ . '/../../example/output/' . $opt['srcDetail']['filename'] . '_resize_' . $widths[$i] . '.' . $opt['srcDetail']['extension'];
+            $this->assertEquals(true, file_exists($file));
+
+            // assert that the resized file dimension matches
+            $fileinfo = getimagesize($file);
+            $this->assertEquals($widths[$i], $fileinfo[0]);
+            $this->assertEquals($heights[$i], $fileinfo[1]);
+
+        }
+
         // resizing width
         $option = [
             'src' => __DIR__ . '/../../example/image/landscape.png',
@@ -421,10 +437,26 @@ class ResizeTest extends TestCase
         $obj = new Resize($option);
         $obj->resize();
 
+        $opt = $obj->getOption();
+        $widths = $opt['config']['dimension'];
+        $heights = $opt['config']['dimensionOtherSide'];
+        for ($i = 0; $i < count($widths); $i++) {
+
+            // assert that the resized file exists
+            $file = __DIR__ . '/../../example/output/' . $opt['srcDetail']['filename'] . '_resize_' . $widths[$i] . '.' . $opt['srcDetail']['extension'];
+            $this->assertEquals(true, file_exists($file));
+
+            // assert that the resized file dimension matches
+            $fileinfo = getimagesize($file);
+            $this->assertEquals($widths[$i], $fileinfo[0]);
+            $this->assertEquals($heights[$i], $fileinfo[1]);
+
+        }
+
 
         /* ========== PORTRAIT IMAGE ========== */
 
-        // resizing width
+        // resizing height
         $option = [
             'src' => __DIR__ . '/../../example/image/portrait.jpeg',
             'destDir' => __DIR__ . '/../../example/output',
@@ -436,6 +468,22 @@ class ResizeTest extends TestCase
         ];
         $obj = new Resize($option);
         $obj->resize();
+
+        $opt = $obj->getOption();
+        $heights = $opt['config']['dimension'];
+        $widths = $opt['config']['dimensionOtherSide'];
+        for ($i = 0; $i < count($widths); $i++) {
+
+            // assert that the resized file exists
+            $file = __DIR__ . '/../../example/output/' . $opt['srcDetail']['filename'] . '_resize_' . $widths[$i] . '.' . $opt['srcDetail']['extension'];
+            $this->assertEquals(true, file_exists($file));
+
+            // assert that the resized file dimension matches
+            $fileinfo = getimagesize($file);
+            $this->assertEquals($widths[$i], $fileinfo[0]);
+            $this->assertEquals($heights[$i], $fileinfo[1]);
+
+        }
 
         // resizing height
         $option = [
@@ -449,6 +497,22 @@ class ResizeTest extends TestCase
         ];
         $obj = new Resize($option);
         $obj->resize();
+
+        $opt = $obj->getOption();
+        $heights = $opt['config']['dimension'];
+        $widths = $opt['config']['dimensionOtherSide'];
+        for ($i = 0; $i < count($widths); $i++) {
+
+            // assert that the resized file exists
+            $file = __DIR__ . '/../../example/output/' . $opt['srcDetail']['filename'] . '_resize_' . $widths[$i] . '.' . $opt['srcDetail']['extension'];
+            $this->assertEquals(true, file_exists($file));
+
+            // assert that the resized file dimension matches
+            $fileinfo = getimagesize($file);
+            $this->assertEquals($widths[$i], $fileinfo[0]);
+            $this->assertEquals($heights[$i], $fileinfo[1]);
+
+        }
 
     }
 }
