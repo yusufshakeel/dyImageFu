@@ -39,6 +39,11 @@ class Helper
     const IMAGE_MODE_LANDSCAPE = 'landscape_image';
     const IMAGE_MODE_PORTRAIT = 'portrait_image';
 
+    const IMAGE_MIME_JPG = 'image/jpg';
+    const IMAGE_MIME_JPEG = 'image/jpeg';
+    const IMAGE_MIME_PNG = 'image/png';
+    const IMAGE_MIME_GIF = 'image/gif';
+
     /**
      * This function will return the proportional height based on the required width and
      * dimensions of the source image.
