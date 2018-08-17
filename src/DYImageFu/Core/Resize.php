@@ -92,7 +92,9 @@ class Resize
      */
     private function _init(array $option)
     {
-        // check and set source image file
+        /**
+         * check and set source image file
+         */
         if (!isset($option['src'])) {
 
             throw new \Exception('src is required.');
@@ -110,7 +112,9 @@ class Resize
 
         }
 
-        // check and set destination directory
+        /**
+         * check and set destination directory
+         */
         if (!isset($option['destDir'])) {
 
             throw new \Exception('destDir is required.');
@@ -125,7 +129,9 @@ class Resize
 
         }
 
-        // check config
+        /**
+         * check config
+         */
         if (!isset($option['config'])) {
 
             throw new \Exception('config is required.');
@@ -136,7 +142,9 @@ class Resize
 
         }
 
-        // check and set resize
+        /**
+         * check and set resize
+         */
         if (!isset($option['config']['resize'])) {
 
             throw new \Exception('config resize is required.');
@@ -151,7 +159,9 @@ class Resize
 
         }
 
-        // check and set dimension
+        /**
+         * check and set dimension
+         */
         if (!isset($option['config']['dimension'])) {
 
             throw new \Exception('config dimension is required.');
@@ -184,7 +194,9 @@ class Resize
         }
         $this->_computeDimensionOtherSide();
 
-        // check and set quality
+        /**
+         * check and set quality
+         */
         if (!isset($option['config']['quality'])) {
 
             throw new \Exception('config quality is required.');
@@ -214,6 +226,7 @@ class Resize
         } else {
             throw new \Exception('config quality must be an integer or decimal value or an array of integer or decimal values.');
         }
+        $this->_computeQuality();
     }
 
     /**
@@ -245,5 +258,143 @@ class Resize
         }
 
         $this->_option['config']['dimensionOtherSide'] = $dimensionOtherSide;
+    }
+
+    /**
+     * This function will compute the quality.
+     */
+    private function _computeQuality()
+    {
+        $len = count($this->_option['config']['dimension']);
+        $qCount = count($this->_option['config']['quality']);
+
+        // if less item present in the array
+        // then fill rest of the places with 100
+        if ($qCount < $len) {
+            $this->_option['config']['quality'] = array_merge($this->_option['config']['quality'], array_fill(0, $len - $qCount, 100));
+        }
+        // if more element present in the array
+        // then take only $len number of elements
+        else {
+            $this->_option['config']['quality'] = array_slice($this->_option['config']['quality'], 0, $len);
+        }
+    }
+
+    /**
+     * This will resize the image.
+     *
+     * @throws \Exception
+     */
+    public function resize()
+    {
+        $src = $this->_option['src'];
+        $mime = $this->_option['srcDetail']['mime'];
+        $resize = $this->_option['config']['resize'];
+        $quality = $this->_option['config']['quality'];
+        $srcWidth = $this->_option['srcDetail']['width'];
+        $srcHeigth = $this->_option['srcDetail']['height'];
+        $srcFilename = $this->_option['srcDetail']['filename'];
+        $extension = $this->_option['srcDetail']['extension'];
+        $destDir = $this->_option['destDir'];
+
+        if ($resize === 'width') {
+            $widths = $this->_option['config']['dimension'];
+            $heights = $this->_option['config']['dimensionOtherSide'];
+        } else if ($resize === 'height') {
+            $heights = $this->_option['config']['dimension'];
+            $widths = $this->_option['config']['dimensionOtherSide'];
+        }
+
+        for ($i = 0; $i < count($widths); $i++) {
+
+            $currWidth = $widths[$i];
+            $currHeight = $heights[$i];
+
+            switch ($mime) {
+
+                case Helper::IMAGE_MIME_JPG:
+                case Helper::IMAGE_MIME_JPEG:
+                    $srcImgFile = imagecreatefromjpeg($src);
+                    if ($srcImgFile === false) {
+                        throw new \Exception("Unable to create image from $extension file.");
+                    }
+
+                    $resizeImgFile = imagecreatetruecolor($currWidth, $currHeight);
+                    if ($resizeImgFile === false) {
+                        throw new \Exception('Unable to create image from true color.');
+                    }
+                    break;
+
+                case Helper::IMAGE_MIME_PNG:
+                    $srcImgFile = imagecreatefrompng($src);
+                    if ($srcImgFile === false) {
+                        throw new \Exception("Unable to create image from $extension file.");
+                    }
+
+                    $resizeImgFile = imagecreatetruecolor($currWidth, $currHeight);
+                    if ($resizeImgFile === false) {
+                        throw new \Exception('Unable to create image from true color.');
+                    }
+
+                    if (imagealphablending($resizeImgFile, false) === FALSE) {
+                        throw new \Exception("Failed to set the blending mode for the resize image.");
+                    }
+
+                    if (imagesavealpha($resizeImgFile, true) === FALSE) {
+                        throw new \Exception("Failed to set the flag to save full alpha channel information when saving $extension image.");
+                    }
+
+                    // for png images quality must be between 0 to 9
+                    if ($quality[$i] > 81) {
+                        $quality[$i] = 81;
+                    } else if ($quality[$i] < 9) {
+                        $quality[$i] = 9;
+                    }
+                    $quality[$i] = round($quality[$i] / 9);
+                    break;
+            }
+
+            // resize
+            if (imagecopyresampled(
+                    $resizeImgFile,
+                    $srcImgFile,
+                    0,
+                    0,
+                    0,
+                    0,
+                    $currWidth,
+                    $currHeight,
+                    $srcWidth,
+                    $srcHeigth
+                ) === false) {
+                throw new \Exception("Failed to resize image.");
+            }
+
+            // create image
+            switch ($mime) {
+                case Helper::IMAGE_MIME_JPG:
+                case Helper::IMAGE_MIME_JPEG:
+                    $destFile = $destDir . '/' . $srcFilename . '_resize_' . $currWidth . '.' . $extension;
+                    if (imagejpeg($resizeImgFile, $destFile, $quality[$i]) === false) {
+                        throw new \Exception('Failed to save image.');
+                    }
+                    break;
+
+                case Helper::IMAGE_MIME_PNG:
+                    $destFile = $destDir . '/' . $srcFilename . '_resize_' . $currWidth . '.' . $extension;
+                    if (imagepng($resizeImgFile, $destFile, $quality[$i]) === FALSE) {
+                        throw new \Exception("Failed to save image.");
+                    }
+                    break;
+            }
+
+            // destroy image
+            if (imagedestroy($resizeImgFile) === false) {
+                throw new \Exception("Failed to free memory associated with resized image.");
+            }
+            if (imagedestroy($srcImgFile) === false) {
+                throw new \Exception("Failed to free memory associated with source image.");
+            }
+        }
     }
 }
