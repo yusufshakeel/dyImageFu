@@ -20,7 +20,7 @@ Now use the different methods to get the desired output.
 
 # `resize()`
 
-This method will resize the image based on your configurations.
+This method will resize the image based on the configurations.
 
 ```PHP
 $obj->resize(config);
@@ -29,6 +29,11 @@ $obj->resize(config);
 Where, `config` is an array of configurations.
 
 
+Can resize the following image files.
+
+* jpeg
+* jpg
+* png
 
 
 
