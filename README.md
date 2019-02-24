@@ -188,11 +188,9 @@ Output file
 Assuming the original widthxheigth = 1000x500 in pixels.
 So, resized dimensions are the following.
 
-= 400x200
-
-= 800x400
-
-= 1200x600
+* 400x200
+* 800x400
+* 1200x600
 
 ```
 /image/source_resize_400.png
@@ -223,10 +221,8 @@ Output file
 Assuming the original widthxheigth = 1000x500 in pixels.
 So, resized dimensions are the following.
 
-= 400x200
-
-= 800x400
-
+* 400x200
+* 800x400
 
 ```
 /image/source_resize_400.png
